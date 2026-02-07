@@ -1,5 +1,5 @@
 import { View, StyleSheet, ViewStyle, ViewProps } from "react-native";
-import { colors, spacing, borderRadius, shadows } from "@/constants/theme";
+import { useThemeColors, spacing, borderRadius, shadows } from "@/constants/theme";
 
 interface CardProps extends ViewProps {
   variant?: "flat" | "elevated";
@@ -14,11 +14,17 @@ export function Card({
   style,
   ...props
 }: CardProps) {
+  const colors = useThemeColors();
+
   return (
     <View
       style={[
         styles.base,
-        { padding: spacing[padding] },
+        {
+          backgroundColor: colors.card,
+          borderColor: colors.separator,
+          padding: spacing[padding],
+        },
         variant === "elevated" && shadows.md,
         style,
       ]}
@@ -31,9 +37,7 @@ export function Card({
 
 const styles = StyleSheet.create({
   base: {
-    backgroundColor: colors.card,
     borderRadius: borderRadius.md,
     borderWidth: StyleSheet.hairlineWidth,
-    borderColor: colors.separator,
   },
 });

@@ -7,7 +7,12 @@ import {
   ActivityIndicator,
 } from "react-native";
 import * as Haptics from "expo-haptics";
-import { colors, spacing, borderRadius, typography } from "@/constants/theme";
+import {
+  useThemeColors,
+  spacing,
+  borderRadius,
+  ColorTokens,
+} from "@/constants/theme";
 
 type ButtonVariant = "primary" | "secondary" | "ghost";
 type ButtonSize = "sm" | "md" | "lg";
@@ -24,6 +29,26 @@ interface ButtonProps {
   textStyle?: TextStyle;
 }
 
+const getVariantStyles = (
+  colors: ColorTokens
+): Record<ButtonVariant, ViewStyle> => ({
+  primary: { backgroundColor: colors.primary },
+  secondary: {
+    backgroundColor: colors.surface,
+    borderWidth: 1,
+    borderColor: colors.border,
+  },
+  ghost: { backgroundColor: "transparent" },
+});
+
+const getVariantTextStyles = (
+  colors: ColorTokens
+): Record<ButtonVariant, TextStyle> => ({
+  primary: { color: colors.textInverted },
+  secondary: { color: colors.text },
+  ghost: { color: colors.primary },
+});
+
 export function Button({
   title,
   onPress,
@@ -35,6 +60,10 @@ export function Button({
   style,
   textStyle,
 }: ButtonProps) {
+  const colors = useThemeColors();
+  const variantStyles = getVariantStyles(colors);
+  const variantTextStyles = getVariantTextStyles(colors);
+
   const handlePress = () => {
     if (haptic) {
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
@@ -108,16 +137,4 @@ const sizeTextStyles: Record<ButtonSize, TextStyle> = {
   sm: { fontSize: 14 },
   md: { fontSize: 16 },
   lg: { fontSize: 18 },
-};
-
-const variantStyles: Record<ButtonVariant, ViewStyle> = {
-  primary: { backgroundColor: colors.primary },
-  secondary: { backgroundColor: colors.surface, borderWidth: 1, borderColor: colors.border },
-  ghost: { backgroundColor: "transparent" },
-};
-
-const variantTextStyles: Record<ButtonVariant, TextStyle> = {
-  primary: { color: colors.textInverted },
-  secondary: { color: colors.text },
-  ghost: { color: colors.primary },
 };
