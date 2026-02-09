@@ -1,88 +1,51 @@
-# Micro-App Template 📱
+# 🎵 SoundMixer
 
-Standard starter for all our React Native + Expo micro-apps. Clone this, rename, and build.
+Mix ambient sounds for sleep, focus, and relaxation — no subscription, no account.
 
-## Quick Start
+<p align="center">
+  🌧️ Rain · ⛈️ Thunder · 🌊 Ocean · 🌲 Forest · 💨 Wind · 🔥 Fire<br/>
+  🐦 Birds · 💧 Creek · 📻 White · 🎵 Pink · 🟤 Brown · 🌀 Fan
+</p>
+
+## Features
+
+- **12 ambient sounds** — mix and match to create your perfect soundscape
+- **Individual volume control** — fine-tune each sound independently
+- **Sleep timer** — auto-stop with gentle fade-out (15min, 30min, 1hr, 2hr, custom)
+- **Background playback** — keeps playing when you switch apps
+- **Persistent settings** — remembers your mix between sessions
+- **Dark mode** — full light and dark theme support
+- **Privacy-first** — zero data collection, everything local
+
+## Getting Started
 
 ```bash
-# Clone the template
-gh repo clone molty-assistant/expo-micro-template my-app
-cd my-app
-
-# Install deps
 npm install
-
-# Run in Expo Go
 npx expo start
 ```
 
-## Structure
+## ⚠️ Audio Files
 
-```
-app/                    # Expo Router screens (file-based routing)
-├── _layout.tsx         # Root layout (SafeArea, StatusBar, Stack)
-├── index.tsx           # Home screen
-└── settings.tsx        # Settings screen
+The audio files in `assets/sounds/` are **silent placeholders**. Replace them with real loopable ambient sound files before shipping. See [HANDOFF.md](./HANDOFF.md) for details.
 
-src/
-├── components/         # Reusable UI components (Button, Card)
-├── constants/          # Design tokens (colors, spacing, typography)
-├── hooks/              # Custom hooks (useStorage for persistence)
-├── types/              # TypeScript type definitions
-└── utils/              # Utility functions
-```
+## Tech Stack
 
-## What's Included
+- [Expo](https://expo.dev) (SDK 54)
+- [expo-router](https://docs.expo.dev/router/introduction/) — file-based routing
+- [expo-av](https://docs.expo.dev/versions/latest/sdk/audio/) — audio playback
+- [AsyncStorage](https://react-native-async-storage.github.io/async-storage/) — persistent state
+- TypeScript (strict mode)
 
-| Feature | Details |
-|---------|---------|
-| **Routing** | Expo Router (file-based, typed routes) |
-| **Design tokens** | Centralised colors, spacing, typography, shadows |
-| **Button component** | Variants (primary/secondary/ghost), sizes, haptics, loading state |
-| **Card component** | Flat/elevated variants, configurable padding |
-| **Persistent state** | `useStorage` hook (AsyncStorage-backed useState) |
-| **Haptics** | expo-haptics, pre-wired in Button |
-| **TypeScript** | Strict mode, path aliases (`@/` → `src/`) |
-| **Cross-platform** | iOS + Android via Expo, no native code required |
-
-## Customising for a New App
-
-1. **`app.json`** — Update `name`, `slug`, `scheme`, `bundleIdentifier`, `package`
-2. **`src/constants/theme.ts`** — Adjust colours, spacing, typography to match your app's brand
-3. **`app/`** — Add/rename screens. Expo Router uses file paths as routes.
-4. **`src/components/`** — Add app-specific components
-5. **Assets** — Replace `assets/icon.png`, `assets/splash-icon.png`, `assets/adaptive-icon.png`
-
-## Path Aliases
-
-Import from `src/` using `@/`:
-
-```tsx
-import { Button } from "@/components";
-import { colors } from "@/constants/theme";
-import { useStorage } from "@/hooks";
-```
-
-## Building for Release
+## Building
 
 ```bash
-# EAS Build (recommended)
-npx eas build --platform ios
-npx eas build --platform android
+# Development
+eas build --profile development --platform ios
 
-# Local dev build
-npx expo run:ios
-npx expo run:android
+# Production
+eas build --profile production --platform all
 ```
 
-## Design Principles
+## License
 
-- **One thing, done well.** Each micro-app solves a single problem.
-- **Feels native.** Platform conventions, haptic feedback, smooth transitions.
-- **Works offline.** Local-first where possible; no unnecessary network calls.
-- **Accessible.** Proper labels, contrast ratios, touch targets ≥44pt.
-- **Lightweight.** Minimal dependencies. Fast launch, small bundle.
-
----
-
-Built by [Molty](https://github.com/molty-assistant) 🦉
+MIT

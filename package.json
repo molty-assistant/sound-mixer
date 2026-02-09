@@ -1,5 +1,5 @@
 {
-  "name": "micro-app-template",
+  "name": "sound-mixer",
   "version": "1.0.0",
   "main": "expo-router/entry",
   "scripts": {
@@ -11,7 +11,9 @@
   "dependencies": {
     "@expo/vector-icons": "^15.0.3",
     "@react-native-async-storage/async-storage": "^2.2.0",
+    "@react-native-community/slider": "^5.1.2",
     "expo": "~54.0.33",
+    "expo-av": "^16.0.8",
     "expo-constants": "~18.0.13",
     "expo-font": "~14.0.11",
     "expo-haptics": "~15.0.8",

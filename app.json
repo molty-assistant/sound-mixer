@@ -1,13 +1,13 @@
 {
   "expo": {
-    "name": "micro-app-template",
-    "slug": "micro-app-template",
+    "name": "SoundMixer",
+    "slug": "sound-mixer",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
-    "scheme": "micro-app-template",
+    "scheme": "soundmixer",
     "splash": {
       "image": "./assets/splash-icon.png",
       "resizeMode": "contain",
@@ -15,7 +15,10 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.yourname.micro-app-template"
+      "bundleIdentifier": "com.tommurton.soundmixer",
+      "infoPlist": {
+        "UIBackgroundModes": ["audio"]
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -23,7 +26,7 @@
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true,
-      "package": "com.yourname.microapptemplate"
+      "package": "com.tommurton.soundmixer"
     },
     "web": {
       "favicon": "./assets/favicon.png",
@@ -32,7 +35,13 @@
     "plugins": [
       "expo-router",
       "expo-font",
-      "expo-haptics"
+      "expo-haptics",
+      [
+        "expo-av",
+        {
+          "microphonePermission": false
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true

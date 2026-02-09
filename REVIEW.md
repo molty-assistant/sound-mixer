@@ -1,93 +1,87 @@
-# Review: expo-micro-template
+# Code Review — SoundMixer
 
-*Opus 4.6 review — 2026-02-07*
-
----
-
-## Code Review
-
-### ✅ Strengths
-- **TypeScript strict, clean compile.** Good baseline for all future apps.
-- **Path aliases (`@/`)** eliminate fragile relative imports — this alone saves headaches.
-- **Design tokens are comprehensive.** Colors, spacing, border radius, typography, shadows — all centralised. The `ColorTokens` interface means apps get autocomplete and type-checking on theme customisation.
-- **`useThemeColors()` hook** is the right pattern — components use dynamic colours, StyleSheet.create uses static defaults.
-- **Button component** is well-designed: variants, sizes, haptics, loading, disabled states all handled. The API is clean.
-- **`useStorage` race condition fix** (hasSetBeforeLoad ref) is correct and non-obvious — good catch from self-review.
-
-### 🟡 Medium Issues
-
-**1. Template Button uses static `colors` import, not `useThemeColors()`**
-The Button component imports `colors` (which defaults to `lightColors`) and uses it in `StyleSheet.create` and in the variant maps. This means Button colours DON'T respond to dark mode. The `ActivityIndicator` colour and all variant styles are frozen to light theme values.
-
-*Fix:* Button needs to use `useThemeColors()` inside the component and apply colours via inline styles (same pattern as the screen components), or accept a `colors` prop.
-
-**2. Card has the same dark mode problem**
-Uses `colors.card`, `colors.separator` from the static import.
-
-*Fix:* Same as Button — use `useThemeColors()`.
-
-**3. No `.nvmrc` or `engines` field**
-Template doesn't pin Node version. Different Node versions could cause subtle build differences across machines.
-
-*Fix:* Add `.nvmrc` with `20` (or whatever LTS) and `engines` in `package.json`.
-
-**4. No ESLint or Prettier config**
-For a template that'll be cloned repeatedly, inconsistent formatting will creep in fast.
-
-*Fix:* Add minimal ESLint (expo config) + Prettier with a `.prettierrc`.
-
-### 🟢 Minor Issues
-
-**5. `src/types/index.ts` and `src/utils/index.ts` are near-empty.** Fine as scaffolding but the types file just exports `type ID = string` which is misleading — a template user might think they need to use it.
-
-**6. Settings screen** is a basic placeholder — fine for a template but could include a more realistic example (e.g., a toggle, a link to "About").
-
----
-
-## Feature / UX Review
-
-### ✅ Strengths
-- **File-based routing with typed routes** — the right default for Expo in 2026.
-- **SafeAreaProvider at root** — handles notch/dynamic island correctly.
-- **Haptics included by default** — this is a differentiator. Most templates skip this.
-- **Persistent state hook included** — most first apps need local storage immediately.
-- **`userInterfaceStyle: "automatic"`** — correct default for cross-platform.
-- **Design principles in README** are good. "One thing, done well" sets the tone.
-
-### 🟡 Gaps as a Template
-
-**1. No tab layout example**
-Many micro-apps need tabs. The template should include a commented-out tab layout in `_layout.tsx` or a separate `app/(tabs)/` example.
-
-**2. No ErrorBoundary**
-If a screen throws, the whole app crashes. A template should include a basic ErrorBoundary so derived apps are crash-resilient from day one.
-
-**3. No loading/skeleton pattern**
-Every app has loading states. A `Skeleton` or `LoadingPlaceholder` component would be a useful inclusion.
-
-**4. No EAS configuration**
-The README mentions EAS Build but there's no `eas.json`. Including a starter config would remove a speed bump.
-
-### 🟢 Nice-to-Have
-
-**5. Example of a modal route** (Expo Router supports `app/modal.tsx` with `presentation: "modal"` in the Stack).
-
-**6. Pre-configured app icons** — even placeholder ones at the right dimensions so devs don't have to Google iOS icon sizes.
-
----
+**Reviewer:** Molty 🦉 (self-review)
+**Date:** 2026-02-09
 
 ## Summary
 
-| Area | Rating | Notes |
-|------|--------|-------|
-| Code quality | ⭐⭐⭐⭐ | Clean TypeScript, good structure |
-| Dark mode | ⭐⭐⭐ | Tokens exist but Button/Card don't use them dynamically |
-| Template completeness | ⭐⭐⭐ | Covers basics well. Missing tabs, ErrorBoundary, EAS config |
-| Documentation | ⭐⭐⭐⭐ | README is clear with good structure diagram |
-| Reusability | ⭐⭐⭐⭐ | Easy to clone and customise. Path aliases + tokens make it fast |
+Sound mixer micro-app built on expo-micro-template. 12 ambient sounds with individual volume control, simultaneous playback, sleep timer with fade-out, background audio support, and persistent state.
 
-### Priority Fixes
-1. Fix Button and Card to use `useThemeColors()` for dark mode
-2. Add ESLint + Prettier config
-3. Add ErrorBoundary component
-4. Add `eas.json` starter config
+## Architecture ✅
+
+- **Context provider pattern** for shared state between screens — correct choice since timer modal needs access to both audio mixer and timer state
+- **Custom hooks** (`useAudioMixer`, `useTimer`) cleanly separate concerns
+- **Template patterns preserved** — `useStorage`, `useThemeColors`, `Button`, `Card`, `ErrorBoundary` all kept intact
+- **File structure** follows the spec exactly
+
+## Code Quality ✅
+
+- TypeScript strict mode — **zero errors** (`npx tsc --noEmit` passes cleanly)
+- Consistent use of theme tokens — no hardcoded colors in components
+- Proper cleanup in useEffect hooks (unload sounds, clear intervals)
+- Refs used correctly to avoid stale closures (`onExpireRef`, `isMounted`)
+
+## Audio Engine Review
+
+### Strengths
+- Background audio configured correctly (`staysActiveInBackground: true`, `playsInSilentModeIOS: true`)
+- Individual volume per sound with real-time adjustment
+- Proper sound lifecycle (create → play → pause → unload)
+- Fade-out implementation uses 20 steps over 5 seconds — smooth enough
+
+### Potential Issues
+- ⚠️ **Sound sync on mount**: When app restarts, previously active sounds are restored from storage but `isGlobalPlaying` starts as `false`. User needs to press play to resume. This is actually correct UX (don't auto-play on app launch) but worth noting.
+- ⚠️ **Fade-out captures `mixerState` at call time**: If volumes change during fade, the original volumes are used for restoration. Edge case but acceptable.
+- ⚠️ **No error recovery**: If a sound fails to load, it silently warns. Could show user feedback.
+
+## UX Review
+
+### Strengths
+- Tap to toggle is intuitive — active tiles show accent color + volume slider
+- Each sound has a distinct accent colour for visual differentiation
+- Timer shows remaining time directly in the player bar
+- Haptic feedback on all interactions
+- 4-column grid fits 12 sounds without scrolling on most devices
+
+### Potential Improvements
+- 📱 On very small screens, the 4-column grid with active sliders might feel cramped
+- 🎨 Could add subtle animation when toggling sounds (scale/opacity transition)
+- 🔊 No visual feedback for current volume level beyond the slider position
+- ⏱️ Timer modal could show what sounds are currently active
+
+## Theme / Dark Mode ✅
+
+- `userInterfaceStyle: "automatic"` in app.json
+- `useThemeColors()` used in every component
+- Sound tiles have distinct light and dark accent colours
+- No hardcoded colors
+
+## Production Readiness
+
+| Item | Status |
+|------|--------|
+| TypeScript strict, zero errors | ✅ |
+| app.json fully configured | ✅ |
+| eas.json with all profiles | ✅ |
+| STORE-LISTING.md | ✅ |
+| HANDOFF.md | ✅ |
+| PRIVACY-POLICY.md | ✅ |
+| Background audio | ✅ |
+| Dark mode | ✅ |
+| Persistent state | ✅ |
+| Placeholder audio documented | ✅ |
+
+## Outstanding Items Before Ship
+
+1. **Replace placeholder audio files** with real loopable ambient sounds
+2. **Design app icon** — currently using template placeholder
+3. **Design splash screen** — currently using template placeholder
+4. **Update eas.json** with real Apple Team ID and App Store Connect App ID
+5. **Add Google Play service account key** for Android submission
+6. **Test on physical devices** — especially background audio behaviour
+
+## Verdict
+
+**Ship-ready for development/testing.** Audio files and icons need replacing before store submission, but the app structure, UI, and logic are complete and correct. Clean TypeScript, proper theme support, good separation of concerns.
+
+**Rating: 8/10** — loses points only for placeholder audio and missing custom app icon. Code quality is solid.
