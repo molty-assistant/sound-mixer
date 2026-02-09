@@ -18,9 +18,10 @@ export interface SoundDefinition {
 }
 
 /**
- * NOTE: These audio files are silent placeholders.
+ * NOTE: Nature sounds (rain, thunder, ocean, etc.) are silent placeholders.
  * Replace with real ambient sound loops before shipping.
- * See HANDOFF.md for details.
+ * Noise sounds (white, pink, brown) are real generated audio.
+ * See AUDIO-SOURCES.md for sourcing guide.
  */
 export const SOUNDS: SoundDefinition[] = [
   {
@@ -93,7 +94,7 @@ export const SOUNDS: SoundDefinition[] = [
     emoji: "📻",
     color: "#F5F5F5",
     colorDark: "#2C2C2E",
-    audio: require("../../../assets/sounds/white-noise.mp3"),
+    audio: require("../../../assets/sounds/white-noise.wav"),
   },
   {
     id: "pink-noise",
@@ -101,7 +102,7 @@ export const SOUNDS: SoundDefinition[] = [
     emoji: "🎵",
     color: "#FCE4EC",
     colorDark: "#3D1525",
-    audio: require("../../../assets/sounds/pink-noise.mp3"),
+    audio: require("../../../assets/sounds/pink-noise.wav"),
   },
   {
     id: "brown-noise",
@@ -109,7 +110,7 @@ export const SOUNDS: SoundDefinition[] = [
     emoji: "🟤",
     color: "#EFEBE9",
     colorDark: "#3E2C23",
-    audio: require("../../../assets/sounds/brown-noise.mp3"),
+    audio: require("../../../assets/sounds/brown-noise.wav"),
   },
   {
     id: "fan",
