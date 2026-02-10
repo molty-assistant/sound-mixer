@@ -18,10 +18,10 @@ export interface SoundDefinition {
 }
 
 /**
- * NOTE: Nature sounds (rain, thunder, ocean, etc.) are silent placeholders.
- * Replace with real ambient sound loops before shipping.
- * Noise sounds (white, pink, brown) are real generated audio.
- * See AUDIO-SOURCES.md for sourcing guide.
+ * All 12 sounds are real synthesized audio (WAV).
+ * Nature sounds generated via tools/generate-ambient.js.
+ * Noise sounds generated via tools/generate-noise.js.
+ * See AUDIO-SOURCES.md for details.
  */
 export const SOUNDS: SoundDefinition[] = [
   {
@@ -30,7 +30,7 @@ export const SOUNDS: SoundDefinition[] = [
     emoji: "🌧️",
     color: "#E3F2FD",
     colorDark: "#1A3A5C",
-    audio: require("../../../assets/sounds/rain.mp3"),
+    audio: require("../../../assets/sounds/rain.wav"),
   },
   {
     id: "thunder",
@@ -38,7 +38,7 @@ export const SOUNDS: SoundDefinition[] = [
     emoji: "⛈️",
     color: "#EDE7F6",
     colorDark: "#2D1F4E",
-    audio: require("../../../assets/sounds/thunder.mp3"),
+    audio: require("../../../assets/sounds/thunder.wav"),
   },
   {
     id: "ocean",
@@ -46,7 +46,7 @@ export const SOUNDS: SoundDefinition[] = [
     emoji: "🌊",
     color: "#E0F7FA",
     colorDark: "#1A3C4A",
-    audio: require("../../../assets/sounds/ocean.mp3"),
+    audio: require("../../../assets/sounds/ocean.wav"),
   },
   {
     id: "forest",
@@ -54,7 +54,7 @@ export const SOUNDS: SoundDefinition[] = [
     emoji: "🌲",
     color: "#E8F5E9",
     colorDark: "#1B3A1F",
-    audio: require("../../../assets/sounds/forest.mp3"),
+    audio: require("../../../assets/sounds/forest.wav"),
   },
   {
     id: "wind",
@@ -62,7 +62,7 @@ export const SOUNDS: SoundDefinition[] = [
     emoji: "💨",
     color: "#F3E5F5",
     colorDark: "#3A1D42",
-    audio: require("../../../assets/sounds/wind.mp3"),
+    audio: require("../../../assets/sounds/wind.wav"),
   },
   {
     id: "fireplace",
@@ -70,7 +70,7 @@ export const SOUNDS: SoundDefinition[] = [
     emoji: "🔥",
     color: "#FBE9E7",
     colorDark: "#4A1E14",
-    audio: require("../../../assets/sounds/fireplace.mp3"),
+    audio: require("../../../assets/sounds/fireplace.wav"),
   },
   {
     id: "birds",
@@ -78,7 +78,7 @@ export const SOUNDS: SoundDefinition[] = [
     emoji: "🐦",
     color: "#FFF3E0",
     colorDark: "#3D2E14",
-    audio: require("../../../assets/sounds/birds.mp3"),
+    audio: require("../../../assets/sounds/birds.wav"),
   },
   {
     id: "creek",
@@ -86,7 +86,7 @@ export const SOUNDS: SoundDefinition[] = [
     emoji: "💧",
     color: "#E1F5FE",
     colorDark: "#133345",
-    audio: require("../../../assets/sounds/creek.mp3"),
+    audio: require("../../../assets/sounds/creek.wav"),
   },
   {
     id: "white-noise",
@@ -118,7 +118,7 @@ export const SOUNDS: SoundDefinition[] = [
     emoji: "🌀",
     color: "#E8EAF6",
     colorDark: "#1A1F4E",
-    audio: require("../../../assets/sounds/fan.mp3"),
+    audio: require("../../../assets/sounds/fan.wav"),
   },
 ];
 
